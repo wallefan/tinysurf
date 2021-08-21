@@ -1,0 +1,11 @@
+Once I had the "enter a number to follow a link" thing in place, and noticed how easy it was to navigate using just numbers, I decided I wanted to make it as easy as possible to navigate the program using just the number pad.  So I started staring at it and, just like Kernighan and Ritchie staring at the semicolon on home row, things started jumping out at me.
+
+To go back one page, enter - at the prompt.  To go back n pages, enter -n.  There is not currently a limit as to how much history the browser will keep. Going forward works similarly using + and +n.
+
+Tinysurf, like all good browsers, has a bookmark feature.  *+ will list just the bookmark names, *++ for names and URLs.  Tinysurf ships with its bookmarks list prepopulated with the list of Web services proxied on Gopher, such as npr, cnn, hackernews, lobste.rs, and wikipedia.  You can visit a bookmark by typing e.g. *wikipedia, or by typing the number associated with the bookmark in the bookmark list e.g. *36.
+
+Why don't you try that out right now.  Go to one of the links in your bookmarks (or any link, really), and then go back a page.  I'll wait for you here.
+
+If you don't have an internet connection right now and are just trying out tinysurf for the hell of it, about:blank is in your bookmarks, too.
+
+(In case it wasn't already clear, I'm going to mess with the back-button history a bit for the purposes of this tutorial.  When you hit Back, you'll come back to a different page.)

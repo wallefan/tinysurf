@@ -1,0 +1,9 @@
+Now you know how to get around pages.  Cool.  (I'm tempted to call them webpages, but people on the smallnet tend to be very adamant about the avoidance of this term -- webpages are on the Web, and are filled with all sorts of trackers and, perish the thought, JavaScript.  Pages on Gemini are called capsules, as Gemini was named after the space program which was cheaper and more modular than Apollo, and pages on Gopher are called gopher holes.  But since I'm writing a client that supports both, I kind of need a blanket term, and "pages" seems as good as any.
+
+Anyway.  If there's only one link on a page, and you enter nothing at the prompt, Tinysurf will follow it.  If there are NO links on a page, and you hit enter without typing anything, Tinysurf will go back one.  I added this to make browsing gemlogs and phlogs (which are more or less just blogs, but on GEMini and goPHer respectively) easier.
+
+=> about:tutorial/back Let's try that out
+
+you can also just type 1.  I won't judge.
+
+(By the way, if you got here from the next page, where I teach you about the back button, you were supposed to navigate to a bookmark and THEN go back.  Go forward and try again.)

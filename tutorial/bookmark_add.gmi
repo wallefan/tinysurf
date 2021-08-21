@@ -1,0 +1,23 @@
+Very good.  You can also navigate to a bookmark by its name using */bookmarkname.
+
+While we're on the subject of bookmarks, you can bookmark the current page using *+<name>.  There are no restrictions whatsoever on the character set that can be used in a bookmark name, which means that all of the following are perfectly valid "add bookmark" commands:
+  *+Wally's World
+  *+[the depths]
+  *+*+
+  *++*
+  *+:)
+  *+wallefan01's 1337 H4CK3RSP4CE!!!!!!!!!!
+Although if you ever actually name a bookmark that last one, I will send someone to dispatch you.
+
+You can also create a bookmark without a name using *++, in which case it will only be accessible by typing in the number.  This is discouraged, however, since if at a later date you delete a bookmark before it in the list, then its number will decrement by one, and any muscle memory you may have built up typing that number to visit that site will instantly become obsolete.  A more practical solution is to create a bookmark whose name is purely numeric.  To illustrate what I mean by that, let's look at a practical example.
+
+If you were using a future version of this program that supported HTML, or if at some point in the future some kind soul sets up a raspberry pi in their basement to proxy fivethirtyeight.net via Gemini, then if you navigated to https://fivethirtyeight.net/ (or whatever the Gemini proxy was) and typed:
+  *+538
+and the program responded with:
+  "538" (https://fivethirtyeight.net) is now bookmark #24.
+then you could navigate to the bookmark later by typing either of these:
+  *24
+  */538
+
+Why don't you bookmark this page, just because you can?
+=> about:tutorial/test/bookmark_add?next=bookmark_delete Follow this link once you've done so.
