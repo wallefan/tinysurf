@@ -10,7 +10,7 @@ class BookmarksDialect(csv.Dialect):
 
 def load_bookmarks(f):
     d = {}
-    # Each alias can be mapped to more than one site, so we must map each alias to a list of sites
+    # Each alias can (erroneously) be mapped to more than one site, so we must map each alias to a list of sites
     # rather than a single site.
     with open(f, 'r') as f:
         for site, *aliases in csv.reader(f, BookmarksDialect):

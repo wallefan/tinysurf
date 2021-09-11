@@ -58,6 +58,8 @@ class GeminiHandler(urllib.request.BaseHandler):
         s.close()  # iorefcount will keep the socket open.
         status = f.read(2).decode()
         meta = f.readline().decode()
+        # So far, I have only encountered one gemini capsule that uses a tab instead of a space in the status line,
+        # but support it I shall
         if meta[0] != ' ' or meta[-2:] != '\r\n':
             # Having this as a warning instead of an error *technically* causes this to fail conman.org test #10.
             warnings.warn(GeminiWarning("Gemini protocol violation re: status line format."))

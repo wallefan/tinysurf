@@ -1,0 +1,21 @@
+*  - show this help
+.  - quit the bookmark manager and return to tinysurf
+
++  - list all bookmark names
+-m - delete bookmark number m
++m - print out the URL and all textual aliases associated with bookmark number m
+++ - manually create a bookmark (you will be prompted for URL)
+
+m//n    - swap the numeric indices of bookmarks m and n
+
+-/name   - disassociate the texual alias <name> from its corresponding bookmark (this does not delete the bookmark)
+           if the name is associated with multiple bookmarks, delete it from all of them
+m-/name  - as -/name but only delete from bookmark #m (use if multiple bookmarks have the same name)
++/name   - print out the bookmark number and URL associated with the textual alias <name>
+m+/name  - add the textual alias name to bookmark number m (this will be in addition to any other names the bookmark already has)
+m+./name - put <name> as the first textual alias in the list for bookmark #m, moving what is currently first in the list to the end
+           only the first item in the list gets displayed when listing bookmark names from within tinysurf, so you can set this to something flashy and unicode to show off in your bookmarks list but still type an alias that is convenient for when you actually want to navigate to it
+
+I will add more features to this as I see fit.
+
+It is important to note that the correspondence between bookmarks and names is not 1:1.  Multiple names can share the same bookmark, and, although it is discouraged, multiple bookmarks can share the same name.

@@ -2,7 +2,7 @@ Now you know how to get around pages.  Cool.  (I'm tempted to call them webpages
 
 Anyway.  If there's only one link on a page, and you enter nothing at the prompt, Tinysurf will follow it.  If there are NO links on a page, and you hit enter without typing anything, Tinysurf will go back one.  I added this to make browsing gemlogs and phlogs (which are more or less just blogs, but on GEMini and goPHer respectively) easier.
 
-=> about:tutorial/back Let's try that out
+=> about:tutorial/test/back?about:tutorial/bookmark_add Let's try that out
 
 you can also just type 1.  I won't judge.
 

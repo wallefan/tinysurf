@@ -1,4 +1,6 @@
-On he subject of bookmarks, ** will bring up your bookmark manager.  From here, you can rearrange or delete your bookmarks and add or edit textual aliases.
+Continuing on the subject of bookmarks, ** will bring up your bookmark manager.  From here, you can rearrange or delete your bookmarks and add or edit textual aliases.
 
-about:blank isn't a very useful bookmark, so why don't you delete it.
-=> about:tutorial/bookmark_deletion- Follow this link once you've done so.
+Take a minute to familiarize yourself with the bookmark manager.  I'd recommend deleting the bookmark you created in the last step, but if wanna keep it there I won't judge.
+
+
+=> about:tutorial/

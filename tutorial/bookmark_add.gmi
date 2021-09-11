@@ -20,4 +20,4 @@ then you could navigate to the bookmark later by typing either of these:
   */538
 
 Why don't you bookmark this page, just because you can?
-=> about:tutorial/test/bookmark_add?next=bookmark_delete Follow this link once you've done so.
+=> about:tutorial/test/bookmark_add?about:tutorial/bookmark_delete Follow this link once you've done so.
