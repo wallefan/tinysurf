@@ -49,6 +49,8 @@ class Tinysurf:
         self.history = []
         self.forward = []
         self.last_links = []
+        self.width = 79  # width of the controlling terminal, in columns
+        self.change_size()
         self.config = configparser.ConfigParser({'zebra': '240', 'link_color': '',
                                                  'bookmarks_location': '~/.config/tinysurf/bookmarks.txt',
                                                  'unwrap': 'off'})
@@ -67,9 +69,9 @@ class Tinysurf:
         except ImportError:
             pass
 
-    def change_size(self):
+    def change_size(self, _signal=None, _stackframe=None):
         try:
-            self.width = os.get_terminal_size(0).columns
+            self.width = os.get_terminal_size(0).columns-1
         except:
             print('Unable to get terminal size, defaulting to 79 columns')
             self.width = 79
@@ -273,10 +275,8 @@ class Tinysurf:
             if iterator is not None:
                 if self.config['DEFAULT'].getboolean('unwrap'):
                     iterator = unwrap(iterator)
-                new_links = render(iterator)
+                self.render(iterator)
                 self.history.append(f.geturl())
-                if new_links:
-                    self.links = new_links
             if w:
                 w.close()
 
@@ -340,6 +340,67 @@ class Tinysurf:
                         del self.bookmarks[idx-1]
                         print('Bookmark #%d <%s> deleted.' % (idx, url))
 
+    def render(self, iterator):
+        new_links = self.links = []
+        gray = False
+        for t in iterator:
+            text = t[0]
+            format_instructions = FormatInstructions()
+            if len(t) == 1:
+                target = None
+            elif len(t) == 2:
+                target = t[1]
+                gray = False
+            elif len(t) == 3:
+                target = t[1]
+                format_instructions = t[2]
+            else:
+                print('asdfasfeavduibiaetfuissdfoawe', t)
+                continue
+            if format_instructions.force_ansi:
+                if not target:
+                    sys.stdout.write(format_instructions.force_ansi)
+            elif gray:
+                # if we don't have any forced ansi escapes to write on this line, print the zebra pattern.
+                sys.stdout.write('\x1b[48;5;237m')
+            # I should probably say a few words here about how the "zebra" works. Since text/gemini is a long-line
+            # format, this program, by default, wraps text on line boundaries. This of course leads to a single
+            # logical line (i.e. input line) being split across multiple lines on the terminal. Since paragraphs in
+            # gemini documents are often delimited by a single linefeed, if the last line of a paragraph happens to
+            # be long enough, it can be difficult for the user to determine where one paragraph ends and the next
+            # begins.  To mitigate this, I've added the zebra feature, where every other logical line of text is
+            # printed with a gray background using an ANSI escape.  The link lines are never printed with this
+            # escape, since they're pretty easily differentiable by the number at the start.  Come to think of it,
+            # TODO I should probably make that configurable.
+            # Anyway, the format specifier has the option to force the
+            # zebra on or off, so the next lines can be zebra'd in accordance with whether or not the background of
+            # the formatted line is gray, without the generator function having to keep track of the zebra on its
+            # own and send out custom formatting codes on every other line.
+            if format_instructions.force_zebra is not None:
+                # allow the format instructions to force the next line to be gray or not gray.
+                gray = format_instructions.force_zebra
+            # if we are given no such instruction, toggle the zebra.
+            elif text.strip():  # don't toggle on blank lines.
+                gray = not gray
+            if target:
+                new_links.append(target)
+                # allow the format instructions to override the default format string for links.
+                # this allows colorizing the links to something other than blue, or even changing the whole line of text
+                # and writing the number like ==> 25: [label goes here]
+                # since the vast majority of use cases do not want to do this, a default is provided.
+                # XXX writing directly to stdout instead of word-wrapping is going to cause glitches later.
+                sys.stdout.write((format_instructions.force_ansi or '\x1b[94m[%d]\x1b[99m ') % len(new_links))
+                # make the line after a link not gray TODO make this configurable
+                gray = False
+            if format_instructions.disable_linewrap:
+                sys.stdout.write(text)
+            else:
+                for output_line in textwrap.wrap(text, self.width):
+                    # the escape code \x1b[K will paint the remainder of the current line with the current background
+                    # color which gets rid of the weird (correct) behavior in terminal emulators that are not pycharm
+                    print(output_line, end='\x1b[K\n')
+            sys.stdout.write('\x1b[0m')
+
 
 class FormatInstructions:
     def __init__(self, *, force_zebra=None, force_ansi=None, disable_linewrap=False):
@@ -348,67 +409,7 @@ class FormatInstructions:
         self.disable_linewrap = disable_linewrap
 
 
-def render(iterator):
-    new_links = []
-    gray = False
-    for t in iterator:
-        text = t[0]
-        format_instructions = FormatInstructions()
-        if len(t) == 1:
-            target = None
-        elif len(t) == 2:
-            target = t[1]
-            gray = False
-        elif len(t) == 3:
-            target = t[1]
-            format_instructions = t[2]
-        else:
-            print('asdfasfeavduibiaetfuissdfoawe', t)
-            continue
-        if format_instructions.force_ansi:
-            if not target:
-                sys.stdout.write(format_instructions.force_ansi)
-        elif gray:
-            # if we don't have any forced ansi escapes to write on this line, print the zebra pattern.
-            sys.stdout.write('\x1b[48;5;237m')
-        # I should probably say a few words here about how the "zebra" works.
-        # Since text/gemini is a long-line format, this program, by default, wraps text on line boundaries.
-        # This of course leads to a single logical line (i.e. input line) being split across multiple lines on the
-        # terminal.
-        # Since paragraphs in gemini documents are often delimited by a single linefeed, if the last line of a paragraph
-        # happens to be long enough, it can be difficult for the user to determine where one paragraph ends and
-        # the next begins.  To mitigate this, I've added the zebra feature, where every other logical line of text
-        # is printed with a gray background using an ANSI escape.  The link lines are never printed with this escape,
-        # since they're pretty easily differentiable by the number at the start.  Come to think of it,
-        # TODO I should probably make that configurable.
-        # Anyway, the format specifier has the option to force the zebra on or off, so the next lines can be zebra'd
-        # in accordance with whether or not the background of the formatted line is gray, without the generator function
-        # having to keep track of the zebra on its own and send out custom formatting codes on every other line.
-        if format_instructions.force_zebra is not None:
-            # allow the format instructions to force the next line to be gray or not gray.
-            gray = format_instructions.force_zebra
-        # if we are given no such instruction, toggle the zebra.
-        elif text.strip():  # don't toggle on blank lines.
-            gray = not gray
-        if target:
-            new_links.append(target)
-            # allow the format instructions to override the default format string for links.
-            # this allows colorizing the links to something other than blue, or even changing the whole line of text
-            # and writing the number like ==> 25: [label goes here]
-            # since the vast majority of use cases do not want to do this, a default is provided.
-            # XXX writing directly to stdout instead of word-wrapping is going to cause glitches later.
-            sys.stdout.write((format_instructions.force_ansi or '\x1b[94m[%d]\x1b[99m ') % len(new_links))
-            # make the line after a link not gray TODO make this configurable
-            gray = False
-        if format_instructions.disable_linewrap:
-            sys.stdout.write(text)
-        else:
-            for output_line in textwrap.wrap(text, terminal_width):
-                # the escape code \x1b[K will paint the remainder of the current line with the current background color
-                # which gets rid of the weird (correct) behavior in terminal emulators that are not pycharm
-                print(output_line, end='\x1b[K\n')
-        sys.stdout.write('\x1b[0m')
-    return new_links
+
 
 
 def render_gemini(gemini_doc):
@@ -520,4 +521,6 @@ def unwrap(iterator):
 
 
 if __name__ == '__main__':
-    Tinysurf().main()
+    browser = Tinysurf()
+    browser.register_sigwinch()
+    browser.main()
